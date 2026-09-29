@@ -1,0 +1,26 @@
+[Unit]
+Description=Obsidian vault MCP server
+After=network-online.target livesync-cli.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=obsidian
+EnvironmentFile=/etc/obsidian-mcp.env
+WorkingDirectory=/opt/obsidian-mcp
+ExecStart=/usr/bin/node /opt/obsidian-mcp/src/main.ts
+Restart=on-failure
+RestartSec=3
+
+# Hardening: only the vault is writable.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/srv/vault
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+[Install]
+WantedBy=multi-user.target

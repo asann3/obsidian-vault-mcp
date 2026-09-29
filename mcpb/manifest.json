@@ -1,0 +1,72 @@
+{
+  "manifest_version": "0.3",
+  "name": "obsidian-vault-mcp",
+  "display_name": "Obsidian Vault",
+  "version": "0.1.0",
+  "description": "Read, search and edit an Obsidian vault on disk, and walk its wikilink graph (backlinks, neighbors, orphans). Works without Obsidian running.",
+  "author": { "name": "asann3", "url": "https://github.com/asann3" },
+  "repository": { "type": "git", "url": "https://github.com/asann3/obsidian-vault-mcp" },
+  "license": "MIT",
+  "server": {
+    "type": "node",
+    "entry_point": "server/index.mjs",
+    "mcp_config": {
+      "command": "node",
+      "args": ["${__dirname}/server/index.mjs", "--stdio"],
+      "env": {
+        "OBSIDIAN_VAULT_PATH": "${user_config.vault_path}",
+        "OBSIDIAN_MCP_READONLY": "${user_config.read_only}",
+        "OBSIDIAN_MCP_WRITE_PATHS": "${user_config.write_paths}",
+        "OBSIDIAN_MCP_IGNORE_PATHS": "${user_config.ignore_paths}"
+      }
+    }
+  },
+  "tools": [
+    { "name": "list_notes", "description": "List notes in the vault or a folder" },
+    { "name": "read_note", "description": "Read a note or one heading section" },
+    { "name": "get_note_info", "description": "Frontmatter, tags, headings and link counts" },
+    { "name": "search_notes", "description": "Full-text or regex search" },
+    { "name": "list_tags", "description": "Tags with counts" },
+    { "name": "resolve_link", "description": "Resolve a [[wikilink]] like Obsidian does" },
+    { "name": "get_backlinks", "description": "Notes linking to a note" },
+    { "name": "get_outgoing_links", "description": "Links from a note and where they resolve" },
+    { "name": "graph_neighbors", "description": "N-hop neighborhood in the link graph" },
+    { "name": "find_unresolved_links", "description": "Links to notes that do not exist" },
+    { "name": "find_orphans", "description": "Notes nothing links to" },
+    { "name": "write_note", "description": "Create a note (overwrite needs a flag)" },
+    { "name": "append_to_note", "description": "Append to a note or heading section" },
+    { "name": "edit_section", "description": "Replace or insert into a heading section" },
+    { "name": "replace_in_note", "description": "Exact-match text replacement" },
+    { "name": "update_frontmatter", "description": "Set or remove frontmatter properties" }
+  ],
+  "user_config": {
+    "vault_path": {
+      "type": "directory",
+      "title": "Vault folder",
+      "description": "The Obsidian vault (the folder that contains .obsidian).",
+      "required": true
+    },
+    "read_only": {
+      "type": "boolean",
+      "title": "Read-only",
+      "description": "Refuse all writes. Turn this off to let Claude create and edit notes.",
+      "default": true
+    },
+    "write_paths": {
+      "type": "string",
+      "title": "Writable folders",
+      "description": "Comma-separated vault folders Claude may write to (e.g. daily,inbox). Empty means the whole vault.",
+      "default": ""
+    },
+    "ignore_paths": {
+      "type": "string",
+      "title": "Hidden folders",
+      "description": "Comma-separated vault folders to hide from Claude completely.",
+      "default": ""
+    }
+  },
+  "compatibility": {
+    "platforms": ["darwin", "win32", "linux"],
+    "runtimes": { "node": ">=20.0.0" }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "obsidian-vault-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for an Obsidian vault on disk: read/write/search plus wikilink graph tools",
+  "scripts": {
+    "start": "node src/main.ts",
+    "stdio": "node src/main.ts --stdio",
+    "test": "vitest run",
+    "typecheck": "tsc -p .",
+    "build": "esbuild src/main.ts --bundle --platform=node --target=node20 --format=esm --outfile=mcpb/server/index.mjs --banner:js=\"import{createRequire as __cr}from'node:module';const require=__cr(import.meta.url);\"",
+    "pack:mcpb": "pnpm build && mcpb validate mcpb/manifest.json && mcpb pack mcpb obsidian-vault-mcp.mcpb"
+  },
+  "author": "",
+  "license": "MIT",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.9.0",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/node": "2.1.0",
+    "@modelcontextprotocol/server": "2.1.0",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@anthropic-ai/mcpb": "^2.1.2",
+    "@modelcontextprotocol/client": "2.1.0",
+    "@types/node": "^26.6.3",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.2"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=24"
+  }
+}
